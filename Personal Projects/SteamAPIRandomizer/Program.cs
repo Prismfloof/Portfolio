@@ -3,10 +3,10 @@ using System.Text.Json;
 
 // Define variables.
 var rand = new Random();
-int gameListLength = 0;
 string configPath = "config.json";
+string libraryAPIResponsePath = "libraryAPIResponse.json";
 string steamLibCall;
-SteamResponse? steamData;
+SteamResponse steamData;
 Config? config;
 List<Game> gameList = new();
 
@@ -20,8 +20,8 @@ if (!File.Exists(configPath))
     File.WriteAllText(configPath, defaultJson);
 
     // End program to let user change values.
-    Console.WriteLine("Config file created. Please edit the file with your Steam API key and username, as well as any other settings you wish to change.");
-    Console.WriteLine("Press any key to exit...");
+    Console.WriteLine("Config file created. Please edit the \"config.json\" file with your Steam API key and username, as well as any other settings you wish to change.");
+    Console.WriteLine("Press any key to continue . . .");
     Console.ReadKey();
     return;
 }
@@ -34,20 +34,19 @@ using HttpClient client = new();
 
 // Build Steam API call url.
 steamLibCall = $"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={config!.API_Key}&steamid={config.Steam_ID}&include_appinfo=1&include_played_free_games={config.Include_Free}&format.json";
-// Call Steam API task.
-await ProcessGamesAsync(client);
+// Call Steam API to get a user's library.
+steamData = await QueryLibraryAPI(client);
 // Call function to select a random game.
-SelectGame(gameListLength);
+SelectGame(steamData!.response.game_count);
 // Prevent console window from auto-closing on program end.
 Console.ReadKey();
 
 // Task to call the Steam API to get a user's game library, and then output all the game IDs and names to the console.
-async Task ProcessGamesAsync(HttpClient client)
+async Task<SteamResponse> QueryLibraryAPI(HttpClient client)
 {
     await using Stream stream = await client.GetStreamAsync(steamLibCall);
-    steamData = await JsonSerializer.DeserializeAsync<SteamResponse>(stream);
+    return await JsonSerializer.DeserializeAsync<SteamResponse>(stream);
     gameList = steamData!.response.games;
-    gameListLength = gameList.Count;
 
     Console.WriteLine("Games found: " + steamData.response.game_count);
     Console.WriteLine("Length of Game List: " + steamData.response.games.Count);
