@@ -7,12 +7,11 @@ string version = "0.0.2";
 string configPath = "config.json";
 string libraryAPIResponsePath = "libraryAPIResponse.json";
 string steamLibCall;
-string currentMenu;
 SteamResponse steamData;
 Config? config;
 List<Game> gameList = new();
 
-Console.WriteLine($"Currently using version: {version} of the Steam Library Randomizer.");
+Console.WriteLine(Menus.All["About Menu"].GetDisplayText());
 
 // Check if config exists and creates if not.
 CheckConfigFile(configPath);
