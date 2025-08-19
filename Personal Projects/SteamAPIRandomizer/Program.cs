@@ -3,12 +3,15 @@ using System.Text.Json;
 
 // Define variables.
 var rand = new Random();
+string version = "0.0.1";
 string configPath = "config.json";
 string libraryAPIResponsePath = "libraryAPIResponse.json";
 string steamLibCall;
 SteamResponse steamData;
 Config? config;
 List<Game> gameList = new();
+
+Console.WriteLine($"Currently using version: {version} of the Steam Library Randomizer.");
 
 // Check if config exists and creates if not.
 if (!File.Exists(configPath))
@@ -45,13 +48,35 @@ Console.ReadKey();
 async Task<SteamResponse> QueryLibraryAPI(HttpClient client)
 {
     await using Stream stream = await client.GetStreamAsync(steamLibCall);
-    return await JsonSerializer.DeserializeAsync<SteamResponse>(stream);
+    return await JsonSerializer.DeserializeAsync<SteamResponse>(stream) ?? throw new InvalidOperationException("Invalid API response or no response from Steam API. Please ensure a valid connection to the internet.");
     gameList = steamData!.response.games;
 
     Console.WriteLine("Games found: " + steamData.response.game_count);
     Console.WriteLine("Length of Game List: " + steamData.response.games.Count);
     foreach (var game in gameList ?? Enumerable.Empty<Game>())
         Console.WriteLine(game.appid + " ..... " + game.name);
+
+}
+
+string ListMenuOptions()
+{
+    Console.WriteLine("Availible options:");
+    Console.WriteLine("[1]: Config file options.");
+    Console.WriteLine("[2]: Get gamse from Steam API.");
+    Console.WriteLine("[3]: List all owned games.");
+    Console.WriteLine("[4]: Select random game.");
+
+    string selectedMenuOption = null;
+    if (selectedMenuOption == null)
+    {
+        Console.WriteLine("Please type a number corresponding to the function you wish to perform:");
+        selectedMenuOption = Console.ReadLine() ?? throw new Exception("Please enter a valid number...");
+    }
+    return selectedMenuOption;
+}
+
+void ReadMenuOption()
+{
 
 }
 
