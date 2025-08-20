@@ -11,7 +11,24 @@ SteamResponse steamData;
 Config? config;
 List<Game> gameList = new();
 
-Console.WriteLine(Menus.All["About Menu"].GetDisplayText());
+Console.WriteLine("Version: 0.0.2");
+Console.WriteLine("Current build date: 8/19/2025");
+Console.WriteLine("Created by: Caleb Tapley, A.K.A. Prismfloof.");
+Console.WriteLine("Licensed under MIT License.");
+Console.WriteLine("Please add issues or PRs to the github, or reach out to me at calebtapley28@gmail.com");
+
+while (true)
+{
+    Menus.All["Main Menu"].SwitchMenus();
+    Console.WriteLine(Menus.CurrentMenu);
+    Menus.All["Config Menu"].SwitchMenus();
+    Console.WriteLine(Menus.CurrentMenu);
+    return;
+}
+
+
+
+
 
 // Check if config exists and creates if not.
 CheckConfigFile(configPath);
@@ -24,7 +41,7 @@ config = await JsonSerializer.DeserializeAsync<Config>(openStream);
 using HttpClient client = new();
 
 // Build Steam API call url.
-steamLibCall = $"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={config!.API_Key}&steamid={config.Steam_ID}&include_appinfo=1&include_played_free_games={config.Include_Free}&format.json";
+steamLibCall = $"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={config.API_Key}&steamid={config.Steam_ID}&include_appinfo=1&include_played_free_games={config.Include_Free}&format.json";
 // Call Steam API to get a user's library.
 steamData = await QueryLibraryAPI(client);
 // Call function to select a random game.

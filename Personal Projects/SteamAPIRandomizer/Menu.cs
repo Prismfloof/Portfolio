@@ -9,9 +9,11 @@ public class Menu
         Options = options;
     }
 
-    public string GetDisplayText()
+    public void SwitchMenus()
     {
-        return $"{Title}\n" + string.Join("\n", Options.Select(o => o.Label));
+        Menus.CurrentMenu = Title;
+        Console.WriteLine($"{Title}\n" + string.Join("\n", Options.Select(o => o.Label)));
+        
     }
 
     public MenuOption? GetOption(string input)

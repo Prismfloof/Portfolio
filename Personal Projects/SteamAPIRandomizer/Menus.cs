@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-
 public static class Menus
 {
-    public static string CurrentMenu;
+    public static string CurrentMenu = "Main Menu";
     public static Dictionary<string, Menu> All = new Dictionary<string, Menu>
     {
         ["Main Menu"] = new Menu("Main Menu", new List<MenuOption>
@@ -16,14 +14,6 @@ public static class Menus
         {
             new("[1]: List current config options and values.", "1"),
             new("[2]: Edit values in config file.", "2")
-        }),
-        ["About Menu"] = new Menu("About Menu", new List<MenuOption>
-        {
-            "Version: 0.0.2"),
-            "Current build date: 8/19/2025",
-            "Created by: Caleb Tapley, A.K.A. Prismfloof.",
-            "Licensed under MIT License.",
-            "Please add issues or PRs to the github, or reach out to me at calebtapley28@gmail.com"
         })
     };
 }
